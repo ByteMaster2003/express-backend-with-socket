@@ -1,0 +1,89 @@
+{
+  "name": "express-backend-with-socket",
+  "version": "1.0.0",
+  "description": "Express application with socket.io",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon --ext js,json,mjs,cjs,yaml,yml src/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "prepare": "husky",
+    "lint-staged": "lint-staged"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint --edit"
+    }
+  },
+  "engines": {
+    "node": ">=22.11.0",
+    "npm": ">=10.9.0"
+  },
+  "lint-staged": {
+    "*.{js,mjs,cjs}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ByteMaster2003/express-backend-with-socket.git"
+  },
+  "keywords": [
+    "express",
+    "node",
+    "socket.io"
+  ],
+  "author": "Vivek Sahani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ByteMaster2003/express-backend-with-socket/issues"
+  },
+  "homepage": "https://github.com/ByteMaster2003/express-backend-with-socket#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "bullmq": "^5.44.4",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.1.0",
+    "http-status": "^2.1.0",
+    "ioredis": "^5.6.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.0",
+    "morgan": "^1.10.0",
+    "redoc": "^2.4.0",
+    "redoc-express": "^2.1.0",
+    "socket.io": "^4.8.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@eslint/js": "^9.23.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jest": "^28.11.0",
+    "eslint-plugin-prettier": "^5.2.5",
+    "eslint-plugin-security": "^3.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.5.3"
+  }
+}
