@@ -5,7 +5,7 @@ import { ConnectDB } from "./db.util.js";
 import { generateMD5Hash } from "./hash.util.js";
 import { generateOTP, compareOTP } from "./otp.util.js";
 import { pick } from "./pick.util.js";
-import { redisClient } from "./redis.util.js";
+import { redisClient, closeRedisConnection } from "./redis.util.js";
 import { validatePayloadWithSchema } from "./socket.util.js";
 import tokenUtil from "./token.util.js";
 
@@ -20,5 +20,6 @@ export {
   generateOTP,
   compareOTP,
   validatePayloadWithSchema,
-  tokenUtil
+  tokenUtil,
+  closeRedisConnection
 };

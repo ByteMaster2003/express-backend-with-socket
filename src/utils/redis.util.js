@@ -2,25 +2,40 @@ import IORedis from "ioredis";
 
 import { AppConfig, Logger } from "../config/index.js";
 
-export const redisClient = new IORedis(AppConfig.REDIS_URL, {
-  maxRetriesPerRequest: null
-});
+let redisInstance = null;
 
-redisClient.on("ready", () => {
-  Logger.info("Redis Server Ready To Use");
-});
+const createRedisClient = () => {
+  if (redisInstance) {
+    return redisInstance;
+  }
 
-redisClient.on("error", (error) => {
-  Logger.error(
-    "==================================== Cache Error ===================================="
-  );
-  Logger.error(error);
-});
+  const client = new IORedis(AppConfig.REDIS_URL, {
+    maxRetriesPerRequest: null
+  });
 
-redisClient.on("end", () => {
-  Logger.info("Client disconnected from redis!");
-});
+  client.on("ready", () => {
+    Logger.info("Redis server ready to use");
+  });
 
-process.on("SIGINT", () => {
-  redisClient.quit();
-});
+  client.on("error", (error) => {
+    Logger.error(`Redis error: ${error.message}`);
+  });
+
+  client.on("end", () => {
+    Logger.info("Redis client disconnected");
+    redisInstance = null;
+  });
+
+  redisInstance = client;
+  return redisInstance;
+};
+
+export const redisClient = createRedisClient();
+
+export const closeRedisConnection = async () => {
+  if (redisInstance && redisInstance.status === "ready") {
+    await redisInstance.quit();
+    redisInstance = null;
+    Logger.info("Redis connection closed");
+  }
+};

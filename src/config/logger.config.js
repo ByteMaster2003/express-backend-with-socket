@@ -37,15 +37,56 @@ const Logger = winston.createLogger({
       filename: path.join("logs", "error.log"),
       level: "error",
       maxsize: 5242880, // 5MB
-      maxFiles: 5
+      maxFiles: 20
     }),
     // Combined log file transport
     new winston.transports.File({
-      filename: path.join("logs", "combined.log"),
+      filename: path.join("logs", "info.log"),
       maxsize: 5242880, // 5MB
-      maxFiles: 5
+      maxFiles: 20
     })
   ]
 });
 
-export { Logger };
+const socketLogFormat = winston.format.printf(({ timestamp, level, message, metadata, data }) => {
+  const eventType = `[==================== ${message} ====================]`;
+  let logMessage = `${timestamp} ${level}: ${eventType} ${JSON.stringify(metadata, null, 2)}\n`;
+
+  if (data) {
+    logMessage = `${logMessage}Data: ${JSON.stringify(data)}\n`;
+  }
+
+  return logMessage;
+});
+
+const SocketLogger = winston.createLogger({
+  level: AppConfig.NODE_ENV === "development" ? "debug" : "info",
+  format: winston.format.combine(
+    winston.format.timestamp({
+      format: () => new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+    }),
+    socketLogFormat
+  ),
+  transports: [
+    new winston.transports.Console({
+      stderrLevels: ["error"],
+      format: winston.format.combine(winston.format.colorize(), socketLogFormat)
+    }),
+    // Error log file transport
+    new winston.transports.File({
+      filename: path.join("logs", "socket-error.log"),
+      level: "error",
+      maxsize: 5242880, // 5MB
+      maxFiles: 20
+    }),
+    // Combined log file transport
+    new winston.transports.File({
+      filename: path.join("logs", "socket-info.log"),
+      level: "info",
+      maxsize: 5242880, // 5MB
+      maxFiles: 20
+    })
+  ]
+});
+
+export { Logger, SocketLogger };

@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 
+import { socketLogger } from "./socket.logger.js";
 import { Logger } from "../config/index.js";
 import { verifySocketSession } from "../middlewares/index.js";
 
@@ -17,6 +18,9 @@ export const initializeSocket = (server) => {
 
     // Join user's personal room
     socket.join(`user:${userId}`);
+
+    // Register socket logger
+    socketLogger(io, socket);
 
     // Register events
     // auctionEvents(io, socket);
